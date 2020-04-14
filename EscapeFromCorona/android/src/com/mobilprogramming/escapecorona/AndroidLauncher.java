@@ -14,4 +14,3 @@ public class AndroidLauncher extends AndroidApplication {
 		initialize(new EscapeFromCorona(), config);
 	}
 }
-xdxdxd
