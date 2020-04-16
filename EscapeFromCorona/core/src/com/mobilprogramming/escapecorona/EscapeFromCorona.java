@@ -2,6 +2,7 @@ package com.mobilprogramming.escapecorona;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,11 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -21,8 +24,13 @@ import com.badlogic.gdx.math.Intersector;
 import java.util.Random;
 
 public class EscapeFromCorona extends ApplicationAdapter {
+
 	SpriteBatch batch;
 	Texture background;
+	Texture background2;
+
+	private TextureRegion readyResim,gameOverResmi;
+
 	Texture bird;
 	Texture pig1;
 	Texture pig2;
@@ -32,7 +40,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	int gameState=0;
 	float velocity = 0;
 	float gravity=0.1f;
-	float enemyVelocity=6;
+	float enemyVelocity=7;
 	Random random;
 	int score=0;
 	int scoredEnemy=0;
@@ -59,6 +67,11 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	public void create () {
 		batch=new SpriteBatch();
 		background = new Texture("bact.png");
+		background2= new Texture("bact2.png");
+
+		readyResim = new TextureRegion(new Texture("startbuton.png"));
+		gameOverResmi = new TextureRegion(new Texture("indir2.jpg"));
+
 		bird=  new Texture( "corona.png");
 		pig1= new Texture("Red_Virus.png");
 		pig2= new Texture("Red_Virus.png");
@@ -108,6 +121,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		if (gameState == 1) {
+			batch.draw(bird, birdX, birdY, Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() / 10);
+			font.draw(batch,String.valueOf(score),100,200);
 			if(enemyX[scoredEnemy]<Gdx.graphics.getWidth()/3 - bird.getHeight() /3){
 				score++;
 				if(scoredEnemy<numberofEnemies-1) {
@@ -118,7 +133,10 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			}
 
 			if (Gdx.input.justTouched()) {
+
 				velocity = -7;
+
+
 
 
 			}
@@ -143,23 +161,29 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				long id=sound.play();
 				sound.setLooping(id,true);
 			}
-			if (birdY > 0) {
+			if(birdY > 0 && birdY < Gdx.graphics.getHeight() / 1.09){
 				velocity = velocity + gravity;
 				birdY = birdY - velocity;
-			}else {
-				gameState=2;
+			} else {
+				gameState = 2;
 			}
 		} else if(gameState==0) {
+			batch.draw(background2, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			batch.draw(readyResim, Gdx.graphics.getWidth()/2- readyResim.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -readyResim.getRegionHeight()/2);
 			if (Gdx.input.justTouched()) {
 				gameState = 1;
 			}
 		}else if (gameState==2) {
+
 			font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
 			long id=sound1.play();
 			sound1.setLooping(id,false);
 
+			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
+			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
+
 			if (Gdx.input.justTouched()) {
-				gameState=1;
+				gameState=0;
 				birdY=Gdx.graphics.getHeight()/3;
 
 				for(int i=0; i<numberofEnemies; i++) {
@@ -179,8 +203,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			}
 		}
 
-		batch.draw(bird, birdX, birdY, Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() / 10);
-		font.draw(batch,String.valueOf(score),100,200);
+
+
 		batch.end();
 
 		birdCircle.set(birdX + Gdx.graphics.getWidth() / 30, birdY + Gdx.graphics.getHeight() / 20, Gdx.graphics.getWidth() / 30);
