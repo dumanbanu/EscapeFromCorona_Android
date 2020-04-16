@@ -2,6 +2,8 @@ package com.mobilprogramming.escapecorona;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,6 +41,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	Circle birdCircle;
 	ShapeRenderer shapeRenderer;
 	int numberofEnemies = 4;
+	private Sound sound;
+	private Sound sound1;
+    private Music music;
 
 	float [] enemyX =new float[numberofEnemies];
 	float [] enemyOffSet1 = new float[numberofEnemies];
@@ -91,7 +96,10 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			enemyCircles2[i] = new Circle();
 			enemyCircles3[i] = new Circle();
 		}
-	}
+
+		Sound sound =Gdx.audio.newSound(Gdx.files.internal("raw/165525__thomasweightman__silenced-pistol-bip.aiff"));
+		Sound sound1 =Gdx.audio.newSound(Gdx.files.internal("raw/442127__euphrosyyn__8-bit-game-over.wav"));
+}
 
 	@Override
 	public void render () {
@@ -111,6 +119,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 
 			if (Gdx.input.justTouched()) {
 				velocity = -7;
+
+
 			}
 			for (int i = 0; i < numberofEnemies; i++) {
 				if (enemyX[i] < 0) {
@@ -129,6 +139,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				enemyCircles1[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet1[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 				enemyCircles2[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 				enemyCircles3[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
+
+				long id=sound.play();
+				sound.setLooping(id,true);
 			}
 			if (birdY > 0) {
 				velocity = velocity + gravity;
@@ -142,6 +155,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			}
 		}else if (gameState==2) {
 			font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
+			long id=sound1.play();
+			sound1.setLooping(id,false);
+
 			if (Gdx.input.justTouched()) {
 				gameState=1;
 				birdY=Gdx.graphics.getHeight()/3;
@@ -183,5 +199,6 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	}
 	@Override
 	public void dispose () {
+
 	}
 }
