@@ -110,8 +110,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			enemyCircles3[i] = new Circle();
 		}
 
-		Sound sound =Gdx.audio.newSound(Gdx.files.internal("raw/165525__thomasweightman__silenced-pistol-bip.aiff"));
-		Sound sound1 =Gdx.audio.newSound(Gdx.files.internal("raw/442127__euphrosyyn__8-bit-game-over.wav"));
+		 sound =Gdx.audio.newSound(Gdx.files.internal("res/raw/165525__thomasweightman__silenced-pistol-bip.aiff"));
+		sound1 =Gdx.audio.newSound(Gdx.files.internal("res/raw/394788__kaptin-random__evil-eye.mp3"));
 }
 
 	@Override
@@ -158,8 +158,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				enemyCircles2[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 				enemyCircles3[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 
-				long id=sound.play();
-				sound.setLooping(id,true);
+				long id=sound1.play();
+				sound1.setLooping(id,false);
+
 			}
 			if(birdY > 0 && birdY < Gdx.graphics.getHeight() / 1.09){
 				velocity = velocity + gravity;
@@ -176,8 +177,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 		}else if (gameState==2) {
 
 			font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
-			long id=sound1.play();
-			sound1.setLooping(id,false);
+			long ide=sound.play();
+			sound.setLooping(ide,false);
 
 			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
 			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
@@ -223,6 +224,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	}
 	@Override
 	public void dispose () {
+		sound.dispose();
+		sound1.dispose();
 
 	}
 }
