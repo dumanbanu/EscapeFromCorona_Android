@@ -3,19 +3,12 @@ package com.mobilprogramming.escapecorona;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -49,9 +42,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	Circle birdCircle;
 	ShapeRenderer shapeRenderer;
 	int numberofEnemies = 4;
-	private Sound sound;
-	private Sound sound1;
-    private Music music;
+
 
 	float [] enemyX =new float[numberofEnemies];
 	float [] enemyOffSet1 = new float[numberofEnemies];
@@ -62,6 +53,11 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	Circle[] enemyCircles1;
 	Circle[] enemyCircles2;
 	Circle[] enemyCircles3;
+
+	//Sound sound;
+	//Sound sound1;
+
+
 
 	@Override
 	public void create () {
@@ -110,8 +106,10 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			enemyCircles3[i] = new Circle();
 		}
 
-		 sound =Gdx.audio.newSound(Gdx.files.internal("res/raw/165525__thomasweightman__silenced-pistol-bip.aiff"));
-		sound1 =Gdx.audio.newSound(Gdx.files.internal("res/raw/394788__kaptin-random__evil-eye.mp3"));
+		  // sound= Gdx.audio.newSound(Gdx.files.internal("raw/fd.wav"));
+		   //sound1= Gdx.audio.newSound(Gdx.files.internal("raw/fg.wav"));
+
+		//Preferences prefs = Gdx.app.getPreferences("game preferences");
 }
 
 	@Override
@@ -127,7 +125,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				score++;
 				if(scoredEnemy<numberofEnemies-1) {
 					scoredEnemy++;
-				}else {
+				}
+				else {
 					scoredEnemy=0;
 				}
 			}
@@ -136,6 +135,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 
 				velocity = -7;
 
+				//sound.play();
 
 
 
@@ -158,8 +158,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				enemyCircles2[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 				enemyCircles3[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 
-				long id=sound1.play();
-				sound1.setLooping(id,false);
+
 
 			}
 			if(birdY > 0 && birdY < Gdx.graphics.getHeight() / 1.09){
@@ -175,10 +174,11 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				gameState = 1;
 			}
 		}else if (gameState==2) {
+			//sound1.play();
 
-			font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
-			long ide=sound.play();
-			sound.setLooping(ide,false);
+
+			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
+
 
 			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
 			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
@@ -202,6 +202,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				scoredEnemy=0;
 				score=0;
 			}
+
+
 		}
 
 
@@ -224,8 +226,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	}
 	@Override
 	public void dispose () {
-		sound.dispose();
-		sound1.dispose();
-
-	}
+     // sound.dispose();
+     // sound1.dispose();
+}
 }
