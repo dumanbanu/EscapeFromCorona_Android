@@ -3,19 +3,12 @@ package com.mobilprogramming.escapecorona;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -116,7 +109,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 		  // sound= Gdx.audio.newSound(Gdx.files.internal("raw/fd.wav"));
 		   //sound1= Gdx.audio.newSound(Gdx.files.internal("raw/fg.wav"));
 
-
+		//Preferences prefs = Gdx.app.getPreferences("game preferences");
 }
 
 	@Override
@@ -209,6 +202,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				scoredEnemy=0;
 				score=0;
 			}
+
+
 		}
 
 
