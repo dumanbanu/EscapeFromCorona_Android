@@ -37,6 +37,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	Music music;
 	Music musicb;
 
+	boolean flag =true;
+	boolean flag1=true;
+
 	private TextureRegion readyResim,gameOverResmi;
 
 	int highscore;
@@ -204,7 +207,6 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			}
 
           */
-
 			musicb.setVolume(0.1f);
 			musicb.setLooping(false);
 			musicb.play();
@@ -217,7 +219,11 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
 			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
 			music.setVolume(1.2f);
-			music.play();
+			if (flag) {
+				music.play();
+				flag=false;
+			}
+
 
 			GlyphLayout highscoreLayout = new GlyphLayout(scoreFont, "Highscore:" + highscore, Color.WHITE, 0, Align.left, false);
 			scoreFont.draw( batch,highscoreLayout,Gdx.graphics.getWidth()/20,950);
