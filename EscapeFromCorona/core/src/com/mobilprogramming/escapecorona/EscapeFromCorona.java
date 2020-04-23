@@ -6,7 +6,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -20,37 +19,21 @@ import com.badlogic.gdx.utils.Align;
 import java.util.Random;
 
 public class EscapeFromCorona extends ApplicationAdapter {
-
-
-	private static final int BANNER_WIDTH = 350;
-	private static final int BANNER_HEIGHT = 180;
-
 	SpriteBatch batch;
 	Texture background;
 	Texture background2;
 
-	//Texture exitButtonActive;
-	//Texture exitButtonInactive;
-
+    Texture human;
+    Texture virus1 , virus2 , virus3;
 
 	Sound sound;
-	Music music;
-	Music musicb;
+	Music music, musicb;
 
 	boolean flag =true;
-	boolean flag1=true;
-
 	private TextureRegion readyResim,gameOverResmi;
 
-	int highscore;
-	BitmapFont scoreFont;
-
-	Texture bird;
-	Texture pig1;
-	Texture pig2;
-	Texture pig3;
-	float birdX = 0;
-	float birdY = 0;
+	float humanX = 0;
+	float humanY = 0;
 	int gameState=0;
 	float velocity = 0;
 	float gravity=0.1f;
@@ -58,9 +41,9 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	Random random;
 	int score=0;
 	int scoredEnemy=0;
-	BitmapFont font;
-	BitmapFont font2;
-	Circle birdCircle;
+    int highscore;
+    BitmapFont scoreFont,font,font2;
+	Circle humanCircle;
 	ShapeRenderer shapeRenderer;
 	int numberofEnemies = 4;
 
@@ -77,35 +60,31 @@ public class EscapeFromCorona extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch=new SpriteBatch();
-		background = new Texture("bact.png");
-		background2= new Texture("bact2.png");
+		background = new Texture("background.png");
+		background2= new Texture("background2.png");
 
-		sound = Gdx.audio.newSound(Gdx.files.internal("zipla4.wav"));
-
+		sound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
 		music=Gdx.audio.newMusic(Gdx.files.internal("gamover.mp3"));
-		musicb=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+		musicb=Gdx.audio.newMusic(Gdx.files.internal("baa.ogg"));
+
 		scoreFont = new BitmapFont(Gdx.files.internal("fonts/score3.fnt"));
 
 		readyResim = new TextureRegion(new Texture("startbuton.png"));
 		gameOverResmi = new TextureRegion(new Texture("game_over.png"));
 
-		//exitButtonActive = new Texture("exit_button_active.png");
-		//exitButtonInactive = new Texture("exit_button_inactive.png");
-
-
-		bird=  new Texture( "corona.png");
-		pig1= new Texture("Red_Virus.png");
-		pig2= new Texture("Red_Virus.png");
-		pig3= new Texture("Red_Virus.png");
+		human=  new Texture( "human.png");
+		virus1= new Texture("Red_Virus.png");
+		virus2= new Texture("Red_Virus.png");
+		virus3= new Texture("Red_Virus.png");
 
 		distance=Gdx.graphics.getWidth() /2;
 		random = new Random();
 
-		birdX=Gdx.graphics.getWidth()/3 - bird.getHeight() /3;
-		birdY=Gdx.graphics.getHeight()/3;
+		humanX=Gdx.graphics.getWidth()/3 - human.getHeight() /3;
+		humanY=Gdx.graphics.getHeight()/3;
 
 		shapeRenderer= new ShapeRenderer();
-		birdCircle= new Circle();
+		humanCircle= new Circle();
 		enemyCircles1 = new Circle[numberofEnemies];
 		enemyCircles2 = new Circle[numberofEnemies];
 		enemyCircles3 = new Circle[numberofEnemies];
@@ -118,20 +97,17 @@ public class EscapeFromCorona extends ApplicationAdapter {
 		font2.setColor(Color.RED);
 		font2.getData().setScale(6);
 
-
 		for(int i=0; i<numberofEnemies; i++) {
 			enemyOffSet1[i] = (random.nextFloat()-0.5f)* (Gdx.graphics.getHeight()-200);
 			enemyOffSet2[i] = (random.nextFloat()-0.5f)* (Gdx.graphics.getHeight()-200);
 			enemyOffSet3[i] = (random.nextFloat()-0.5f)* (Gdx.graphics.getHeight()-200);
 
-			enemyX[i] = Gdx.graphics.getWidth()-pig1.getWidth()/2 + i*distance;
+			enemyX[i] = Gdx.graphics.getWidth()-virus1.getWidth()/2 + i*distance;
 
 			enemyCircles1[i] = new Circle();
 			enemyCircles2[i] = new Circle();
 			enemyCircles3[i] = new Circle();
 		}
-
-
 	}
 
 	@Override
@@ -139,7 +115,6 @@ public class EscapeFromCorona extends ApplicationAdapter {
 
 		batch.begin();
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
 
 		Preferences prefs = Gdx.app.getPreferences("mypreferences");
 		this.highscore = prefs.getInteger("highscore",0);
@@ -149,12 +124,10 @@ public class EscapeFromCorona extends ApplicationAdapter {
 			prefs.flush();
 		}
 
-
-
 		if (gameState == 1) {
-			batch.draw(bird, birdX, birdY, Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() / 10);
+			batch.draw(human, humanX, humanY, Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() / 10);
 			font.draw(batch,String.valueOf(score),100,200);
-			if(enemyX[scoredEnemy]<Gdx.graphics.getWidth()/3 - bird.getHeight() /3){
+			if(enemyX[scoredEnemy]<Gdx.graphics.getWidth()/3 - human.getHeight() /3){
 				score++;
 				if(scoredEnemy<numberofEnemies-1) {
 					scoredEnemy++;
@@ -162,12 +135,11 @@ public class EscapeFromCorona extends ApplicationAdapter {
 					scoredEnemy=0;
 				}
 			}
-
 			if (Gdx.input.justTouched()) {
 				sound.play(1.0f);
 				velocity = -5;
 			}
-			for (int i = 0; i < numberofEnemies; i++) {
+			for (	int i = 0; i < numberofEnemies; i++) {
 				if (enemyX[i] < 0) {
 					enemyX[i] = enemyX[i] + numberofEnemies * distance;
 
@@ -177,36 +149,30 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				} else {
 					enemyX[i] = enemyX[i] - enemyVelocity;
 				}
-				batch.draw(pig1, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet1[i], Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 8);
-				batch.draw(pig2, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet2[i], Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 8);
-				batch.draw(pig3, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet3[i], Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 8);
+				batch.draw(virus1, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet1[i],
+						                      Gdx.graphics.getWidth() / 10,Gdx.graphics.getHeight() / 8);
+				batch.draw(virus2, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet2[i],
+						                      Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 8);
+				batch.draw(virus3, enemyX[i], Gdx.graphics.getHeight() / 2 + enemyOffSet3[i],
+						                      Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 8);
 
-				enemyCircles1[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet1[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
-				enemyCircles2[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
-				enemyCircles3[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
+				enemyCircles1[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet1[i] +
+						                      Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
+				enemyCircles2[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] +
+						                      Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
+				enemyCircles3[i] = new Circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] +
+						                      Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
 			}
-			if(birdY > 0 && birdY < Gdx.graphics.getHeight() / 1.09){
+			if(humanY > 0 && humanY < Gdx.graphics.getHeight() / 1.09){
 				velocity = velocity + gravity;
-				birdY = birdY - velocity;
+				humanY = humanY - velocity;
 			} else {
 				gameState = 2;
 			}
-		} else if(gameState==0) {
+		}else if(gameState==0) {
 			batch.draw(background2, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			batch.draw(readyResim, Gdx.graphics.getWidth()/2- readyResim.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -readyResim.getRegionHeight()/2);
 
-
-           /* int x = SurvivorBird.BANNER_WIDTH /2 -200/2;
-			if(Gdx.input.getX() < x + 200 && Gdx.input.getX() > x && SurvivorBird.BANNER_HEIGHT- Gdx.input.getY() <360 +100 && SurvivorBird.BANNER_HEIGHT-Gdx.input.getY()  > 360){
-				batch.draw(exitButtonActive,960,360,200,100);
-				if (Gdx.input.isTouched()){
-					Gdx.app.exit();
-				}else{
-					batch.draw(exitButtonInactive,x,360,200,100);
-				}
-			}
-
-          */
 			musicb.setVolume(0.1f);
 			musicb.setLooping(false);
 			musicb.play();
@@ -218,13 +184,13 @@ public class EscapeFromCorona extends ApplicationAdapter {
 		}
 		else if (gameState==2) {
 			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
-			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
+			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,
+					                 Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
 			music.setVolume(1.2f);
 			if (flag) {
 				music.play();
 				flag=false;
 			}
-
 
 			GlyphLayout highscoreLayout = new GlyphLayout(scoreFont, "Highscore:" + highscore, Color.WHITE, 0, Align.left, false);
 			scoreFont.draw( batch,highscoreLayout,Gdx.graphics.getWidth()/20,950);
@@ -244,7 +210,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 					this.dispose();
 					gameState = 0;
 				}
-				birdY=Gdx.graphics.getHeight()/3;
+				humanY=Gdx.graphics.getHeight()/3;
 
 
 				for(int i=0; i<numberofEnemies; i++) {
@@ -252,7 +218,7 @@ public class EscapeFromCorona extends ApplicationAdapter {
 					enemyOffSet2[i] = (random.nextFloat()-0.5f)* (Gdx.graphics.getHeight()-200);
 					enemyOffSet3[i] = (random.nextFloat()-0.5f)* (Gdx.graphics.getHeight()-200);
 
-					enemyX[i] = Gdx.graphics.getWidth()-pig1.getWidth()/2 + i*distance;
+					enemyX[i] = Gdx.graphics.getWidth()-virus1.getWidth()/2 + i*distance;
 
 					enemyCircles1[i] = new Circle();
 					enemyCircles2[i] = new Circle();
@@ -261,26 +227,19 @@ public class EscapeFromCorona extends ApplicationAdapter {
 				velocity=0;
 				scoredEnemy=0;
 				score=0;
-
-
 			}
 		}
-
 		batch.end();
 
-		birdCircle.set(birdX + Gdx.graphics.getWidth() / 30, birdY + Gdx.graphics.getHeight() / 20, Gdx.graphics.getWidth() / 30);
-		//shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		//shapeRenderer.setColor(Color.BLACK);
-		//shapeRenderer.circle(birdCircle.x, birdCircle.y, birdCircle.radius);
+		humanCircle.set(humanX + Gdx.graphics.getWidth() / 30, humanY + Gdx.graphics.getHeight() / 20,
+				        Gdx.graphics.getWidth() / 30);
+
 		for (int i = 0; i<numberofEnemies; i++) {
-			//shapeRenderer.circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet1[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
-			// shapeRenderer.circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet2[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
-			//shapeRenderer.circle(enemyX[i] + Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 2 + enemyOffSet3[i] + Gdx.graphics.getHeight() / 16, Gdx.graphics.getWidth() / 20);
-			if(Intersector.overlaps(birdCircle,enemyCircles1[i]) || Intersector.overlaps(birdCircle,enemyCircles2[i]) || Intersector.overlaps(birdCircle,enemyCircles3[i])) {
+			if(Intersector.overlaps(humanCircle,enemyCircles1[i]) || Intersector.overlaps(humanCircle,enemyCircles2[i])
+					|| Intersector.overlaps(humanCircle,enemyCircles3[i])) {
 				gameState=2;
 			}
 		}
-		//shapeRenderer.end();
 	}
 	@Override
 	public void dispose () {
