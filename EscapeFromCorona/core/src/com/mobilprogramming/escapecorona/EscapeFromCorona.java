@@ -181,7 +181,8 @@ public class EscapeFromCorona extends ApplicationAdapter {
 
 				gameState = 1;
 			}
-		}else if (gameState==2) {
+		}
+		else if (gameState==2) {
 			//font2.draw(batch,"Game Over", 100,Gdx.graphics.getHeight()/2);
 			batch.draw(gameOverResmi,Gdx.graphics.getWidth()/2- gameOverResmi.getRegionWidth()/2,
 					                 Gdx.graphics.getHeight()/2 -gameOverResmi.getRegionHeight()/2);
